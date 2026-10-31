@@ -35,9 +35,10 @@
   --border-charcoal: #2A2E38;
 
   /* Typography */
-  --font-heading: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
-  --font-body: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
-  --font-mono: 'Comic Sans MS', 'Comic Sans', cursive, monospace;
+  --font-heading: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-comic: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
 
   /* Elevation */
   --shadow-sm: 0 1px 2px rgba(18, 19, 22, 0.05);
@@ -111,6 +112,21 @@ h1, h2, h3, h4, .font-heading {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+/* Comic Sans exclusively for small light black / secondary descriptive text */
+.landing-description,
+.spec-item-desc,
+.timeline-snippet,
+.ai-explanation,
+.factor-item div span,
+.case-descriptors-row,
+.descriptor-item span,
+.detail-drawer p,
+.font-comic,
+[style*="var(--text-secondary)"],
+[style*="var(--text-muted)"] {
+  font-family: var(--font-comic) !important;
 }
 
 /* ==========================================================================
