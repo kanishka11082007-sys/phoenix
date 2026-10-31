@@ -35,9 +35,9 @@
   --border-charcoal: #2A2E38;
 
   /* Typography */
-  --font-heading: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-heading: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+  --font-body: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+  --font-mono: 'Comic Sans MS', 'Comic Sans', cursive, monospace;
 
   /* Elevation */
   --shadow-sm: 0 1px 2px rgba(18, 19, 22, 0.05);
