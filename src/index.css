@@ -1141,12 +1141,20 @@ h1, h2, h3, h4, .font-heading {
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid #232730;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.schematic-map-container.is-panning {
+  cursor: grabbing;
 }
 
 .map-svg-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  touch-action: none;
 }
 
 .map-controls-overlay {
@@ -1179,6 +1187,12 @@ h1, h2, h3, h4, .font-heading {
   border-color: var(--accent-orange);
 }
 
+.map-btn.active {
+  background: var(--accent-orange);
+  color: #FFFFFF;
+  border-color: var(--accent-orange);
+}
+
 .map-legend {
   position: absolute;
   bottom: 14px;
@@ -1196,6 +1210,7 @@ h1, h2, h3, h4, .font-heading {
   color: #C0C7D5;
   z-index: 10;
   flex-wrap: wrap;
+  pointer-events: none;
 }
 
 .legend-item {
@@ -1210,23 +1225,23 @@ h1, h2, h3, h4, .font-heading {
   border-radius: 50%;
 }
 
-/* Pin styles on map */
+/* Pin styles on map - no transform override on SVG coordinates to prevent jitter */
 .map-pin-group {
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
 
-.map-pin-group:hover {
-  transform: scale(1.15);
+.map-pin-group:hover circle:first-of-type {
+  stroke-width: 4px;
 }
 
-.map-pin-pulse {
-  animation: mapPulse 2s infinite;
+.map-pin-group:hover rect {
+  stroke-width: 2px;
 }
 
-@keyframes mapPulse {
-  0% { r: 10; opacity: 0.8; }
-  100% { r: 24; opacity: 0; }
+.map-pin-group:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 4px;
 }
 
 /* ==========================================================================
