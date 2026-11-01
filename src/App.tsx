@@ -37,22 +37,24 @@ import {
   History, 
   ShieldAlert, 
   Lock,
-  Layers
+  Layers,
+  AlertTriangle,
+  FolderSearch
 } from 'lucide-react';
 
 type CaseSubView = 'matrix' | 'suggestions' | 'table' | 'activity';
 
 export const App: React.FC = () => {
-  // Navigation State
-  const [currentScreen, setCurrentScreen] = useState<'landing' | 'workspace'>('landing');
-  const [currentTab, setCurrentTab] = useState<WorkspaceTab>('cases');
+  // Navigation State: defaults to workspace so seeded cases are immediately visible
+  const [currentScreen, setCurrentScreen] = useState<'landing' | 'workspace'>('workspace');
+  const [currentTab, setCurrentTab] = useState<WorkspaceTab>('active-case');
   const [caseSubView, setCaseSubView] = useState<CaseSubView>('matrix');
 
-  // Core Data State
+  // Core Data State: seeded Delhi casework
   const [cases, setCases] = useState<Case[]>(INITIAL_CASES);
-  const [activeCaseId, setActiveCaseId] = useState<string>('case-014');
+  const [activeCaseId, setActiveCaseId] = useState<string>('case-del-014');
   const [sightings, setSightings] = useState<Sighting[]>(INITIAL_SIGHTINGS);
-  const [selectedSightingId, setSelectedSightingId] = useState<string | null>('sight-201');
+  const [selectedSightingId, setSelectedSightingId] = useState<string | null>('sight-del-201');
   const [aiSuggestions, setAiSuggestions] = useState<AISuggestion[]>(INITIAL_AI_SUGGESTIONS);
   const [activityLogs, setActivityLogs] = useState<ActivityLogItem[]>(INITIAL_ACTIVITY_LOG);
   const [evidenceSources] = useState<EvidenceSourceInfo[]>(EVIDENCE_SOURCES);
@@ -63,12 +65,25 @@ export const App: React.FC = () => {
   const [isEditCaseModalOpen, setIsEditCaseModalOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  // Computed Active Case
+  // Computed Active Case & Records
   const activeCase = cases.find((c) => c.id === activeCaseId) || cases[0];
   const activeSightings = sightings.filter((s) => s.caseId === activeCase.id);
   const activeSuggestions = aiSuggestions.filter((s) => s.caseId === activeCase.id);
   const activeLogs = activityLogs.filter((l) => l.caseId === activeCase.id);
-  const selectedSighting = sightings.find((s) => s.id === selectedSightingId) || null;
+  const selectedSighting = activeSightings.find((s) => s.id === selectedSightingId) || activeSightings[0] || null;
+
+  // Case Selection Switcher
+  const handleSelectCase = (caseId: string) => {
+    setActiveCaseId(caseId);
+    const caseSightings = sightings.filter((s) => s.caseId === caseId);
+    if (caseSightings.length > 0) {
+      setSelectedSightingId(caseSightings[0].id);
+    } else {
+      setSelectedSightingId(null);
+    }
+    setCurrentTab('active-case');
+    setCaseSubView('matrix');
+  };
 
   // Helper: Toast Notifications
   const addToast = (type: 'success' | 'info' | 'warning', message: string) => {
@@ -97,9 +112,9 @@ export const App: React.FC = () => {
     const newLog: ActivityLogItem = {
       id: `act-${Date.now()}`,
       caseId: activeCase.id,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' EST',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST',
       actor: 'Det. Sarah Vance',
-      actorBadge: 'INV-4082',
+      actorBadge: 'INV-DEL-4082',
       actionType,
       summary,
       details,
@@ -156,7 +171,7 @@ export const App: React.FC = () => {
     status: AISuggestionStatus,
     decisionNote?: string
   ) => {
-    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' EST';
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' IST';
 
     setAiSuggestions((prev) =>
       prev.map((sugg) => {
@@ -164,7 +179,7 @@ export const App: React.FC = () => {
           return {
             ...sugg,
             reviewStatus: status,
-            reviewedBy: 'Det. Sarah Vance (INV-4082)',
+            reviewedBy: 'Det. Sarah Vance (INV-DEL-4082)',
             reviewedAt: timestamp,
             decisionNote: decisionNote || `Decision: ${status}`,
           };
@@ -249,7 +264,8 @@ export const App: React.FC = () => {
   const handleCreateCase = (newCase: Case) => {
     setCases((prev) => [newCase, ...prev]);
     setActiveCaseId(newCase.id);
-    setCurrentTab('cases');
+    setSelectedSightingId(null);
+    setCurrentTab('active-case');
 
     logActivity(
       'ADD_SIGHTING',
@@ -278,12 +294,14 @@ export const App: React.FC = () => {
   // Reset to Demo Data
   const handleResetDemoData = () => {
     setCases(INITIAL_CASES);
-    setActiveCaseId('case-014');
+    setActiveCaseId('case-del-014');
     setSightings(INITIAL_SIGHTINGS);
-    setSelectedSightingId('sight-201');
+    setSelectedSightingId('sight-del-201');
     setAiSuggestions(INITIAL_AI_SUGGESTIONS);
     setActivityLogs(INITIAL_ACTIVITY_LOG);
-    addToast('info', 'Prototype restored to default demonstration state.');
+    setCurrentTab('active-case');
+    setCaseSubView('matrix');
+    addToast('info', 'Prototype restored to default Delhi demonstration casework.');
   };
 
   // Quick select sighting by code (e.g. from AI link button)
@@ -298,18 +316,20 @@ export const App: React.FC = () => {
 
   // Select demo case from landing page
   const handleOpenDemoCase = (caseId: string) => {
-    setActiveCaseId(caseId);
+    handleSelectCase(caseId);
     setCurrentScreen('workspace');
-    setCurrentTab('cases');
+    setCurrentTab('active-case');
     setCaseSubView('matrix');
-    setSelectedSightingId('sight-201');
   };
 
   // If on landing screen, show high-impact landing page
   if (currentScreen === 'landing') {
     return (
       <LandingPage
-        onOpenWorkspace={() => setCurrentScreen('workspace')}
+        onOpenWorkspace={() => {
+          setCurrentScreen('workspace');
+          setCurrentTab('active-case');
+        }}
         onOpenDemoCase={handleOpenDemoCase}
       />
     );
@@ -326,20 +346,71 @@ export const App: React.FC = () => {
         onSelectTab={setCurrentTab}
         onReturnToLanding={() => setCurrentScreen('landing')}
         onOpenNewCaseModal={() => setIsNewCaseModalOpen(true)}
-        activeCaseCount={cases.filter((c) => c.status === 'Active Priority 1').length}
+        activeCaseCount={cases.length}
+        activeCaseCode={activeCase.code}
         totalSightingsCount={sightings.length}
       />
 
-      {/* Main Workspace Body */}
+      {/* Visible Demonstration Notice */}
+      <div 
+        style={{
+          background: '#FFFBEB',
+          borderBottom: '1px solid #FDE68A',
+          padding: '8px 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          fontSize: '12px',
+          color: '#92400E',
+          flexWrap: 'wrap',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <AlertTriangle size={15} color="#D97706" style={{ flexShrink: 0 }} />
+          <span>
+            <strong>DEMO DATA & SIMULATED CASEWORK:</strong> All case files, names (e.g. Mira Sharma, Kabir Mehta, Zoya Kapoor), Delhi neighbourhood references, and sighting timelines are entirely fictional for demonstration. No real missing-person information, exact coordinates, or live CCTV feeds are used.
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          <span style={{ 
+            fontFamily: 'var(--font-mono)', 
+            fontSize: '11px', 
+            background: '#FEF3C7', 
+            color: '#B45309', 
+            padding: '2px 8px', 
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid #FCD34D',
+            fontWeight: 700
+          }}>
+            7 SEEDED DELHI CASES
+          </span>
+        </div>
+      </div>
+
+      {/* Tab: Master Case Roster */}
       {currentTab === 'cases' && (
+        <main className="workspace-content">
+          <CaseListView
+            cases={cases}
+            activeCaseId={activeCaseId}
+            onSelectCase={handleSelectCase}
+            onOpenNewCaseModal={() => setIsNewCaseModalOpen(true)}
+          />
+        </main>
+      )}
+
+      {/* Tab: Active Case Investigation Workspace */}
+      {currentTab === 'active-case' && (
         <>
           {/* Active Case Banner Header */}
           <CaseDetailsHeader
             activeCase={activeCase}
             casesList={cases}
-            onSelectCase={setActiveCaseId}
+            onSelectCase={handleSelectCase}
             onOpenAddSightingModal={() => setIsAddSightingModalOpen(true)}
             onOpenEditCaseModal={() => setIsEditCaseModalOpen(true)}
+            onOpenCaseRoster={() => setCurrentTab('cases')}
           />
 
           <main className="workspace-content">
@@ -491,8 +562,12 @@ export const App: React.FC = () => {
             sightings={sightings}
             selectedSightingId={selectedSightingId}
             onSelectSighting={(id) => {
+              const targetSighting = sightings.find((s) => s.id === id);
+              if (targetSighting) {
+                setActiveCaseId(targetSighting.caseId);
+              }
               setSelectedSightingId(id);
-              setCurrentTab('cases');
+              setCurrentTab('active-case');
               setCaseSubView('matrix');
             }}
           />

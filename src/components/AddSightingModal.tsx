@@ -18,6 +18,7 @@ export const AddSightingModal: React.FC<AddSightingModalProps> = ({
   onAddSighting,
 }) => {
   const [source, setSource] = useState<SightingSource>('CCTV Upload');
+  const [neighbourhood, setNeighbourhood] = useState('Connaught Place');
   const [locationName, setLocationName] = useState('');
   const [reportedTime, setReportedTime] = useState('19:15 hrs');
   const [elapsedMinutes, setElapsedMinutes] = useState(165);
@@ -34,7 +35,7 @@ export const AddSightingModal: React.FC<AddSightingModalProps> = ({
     e.preventDefault();
     if (!locationName || !description) return;
 
-    const newCode = `RPT-${Math.floor(206 + Math.random() * 50)}`;
+    const newCode = `RPT-DEL-${Math.floor(250 + Math.random() * 50)}`;
 
     onAddSighting({
       caseId,
@@ -42,7 +43,8 @@ export const AddSightingModal: React.FC<AddSightingModalProps> = ({
       source,
       reportedTime,
       elapsedMinutes: Number(elapsedMinutes),
-      locationName,
+      neighbourhood: neighbourhood || 'Connaught Place',
+      locationName: `${neighbourhood} — ${locationName}`,
       coordinates: { x: Number(coordX), y: Number(coordY) },
       description,
       clothingNotes: clothingNotes || 'Attire matches primary case specifications.',

@@ -9,7 +9,8 @@ import {
   Edit3, 
   Layers, 
   Lock,
-  ChevronDown
+  ChevronDown,
+  FolderSearch
 } from 'lucide-react';
 
 interface CaseDetailsHeaderProps {
@@ -18,6 +19,7 @@ interface CaseDetailsHeaderProps {
   onSelectCase: (caseId: string) => void;
   onOpenAddSightingModal: () => void;
   onOpenEditCaseModal: () => void;
+  onOpenCaseRoster?: () => void;
 }
 
 export const CaseDetailsHeader: React.FC<CaseDetailsHeaderProps> = ({
@@ -26,6 +28,7 @@ export const CaseDetailsHeader: React.FC<CaseDetailsHeaderProps> = ({
   onSelectCase,
   onOpenAddSightingModal,
   onOpenEditCaseModal,
+  onOpenCaseRoster,
 }) => {
   const getStatusBadgeClass = (status: Case['status']) => {
     switch (status) {
@@ -65,6 +68,40 @@ export const CaseDetailsHeader: React.FC<CaseDetailsHeaderProps> = ({
         <div className="case-info-main">
           <div className="case-meta-top">
             <span className="case-code-chip">{activeCase.code}</span>
+            <span 
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '2px 8px',
+                background: '#FEF08A',
+                color: '#713F12',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 700,
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid #EAB308',
+                letterSpacing: '0.05em'
+              }}
+            >
+              {activeCase.simulationBadge || 'SIMULATED CASE'}
+            </span>
+            {activeCase.neighbourhood && (
+              <span 
+                style={{
+                  padding: '2px 8px',
+                  background: 'var(--bg-surface-subtle)',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--border-medium)'
+                }}
+              >
+                DELHI • {activeCase.neighbourhood}
+              </span>
+            )}
             <h2 className="case-title">
               {activeCase.title}
               <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--text-muted)' }}>
@@ -78,40 +115,68 @@ export const CaseDetailsHeader: React.FC<CaseDetailsHeaderProps> = ({
             </div>
 
             {/* Quick Case Switcher */}
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <select
-                id="case-switcher-select"
-                aria-label="Switch active case"
-                value={activeCase.id}
-                onChange={(e) => onSelectCase(e.target.value)}
-                style={{
-                  padding: '3px 24px 3px 10px',
-                  fontSize: '12px',
-                  fontFamily: 'var(--font-mono)',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-medium)',
-                  background: 'var(--bg-surface-subtle)',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                }}
-              >
-                {casesList.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    Switch Case: {c.code} ({c.title})
-                  </option>
-                ))}
-              </select>
-              <ChevronDown 
-                size={12} 
-                style={{ 
-                  position: 'absolute', 
-                  right: '8px', 
-                  top: '50%', 
-                  transform: 'translateY(-50%)', 
-                  pointerEvents: 'none',
-                  color: 'var(--text-muted)'
-                }} 
-              />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <select
+                  id="case-switcher-select"
+                  aria-label="Switch active case"
+                  value={activeCase.id}
+                  onChange={(e) => onSelectCase(e.target.value)}
+                  style={{
+                    padding: '3px 24px 3px 10px',
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-mono)',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--border-medium)',
+                    background: 'var(--bg-surface-subtle)',
+                    cursor: 'pointer',
+                    appearance: 'none',
+                  }}
+                >
+                  {casesList.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      Switch Case: {c.code} ({c.title})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown 
+                  size={12} 
+                  style={{ 
+                    position: 'absolute', 
+                    right: '8px', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)', 
+                    pointerEvents: 'none',
+                    color: 'var(--text-muted)'
+                  }} 
+                />
+              </div>
+
+              {onOpenCaseRoster && (
+                <button
+                  id="btn-view-all-cases"
+                  onClick={onOpenCaseRoster}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '3px 8px',
+                    fontSize: '11px',
+                    fontFamily: 'var(--font-heading)',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--border-medium)',
+                    background: 'var(--bg-surface-subtle)',
+                    color: 'var(--text-primary)',
+                    cursor: 'pointer',
+                  }}
+                  title="Open Master Case Roster"
+                >
+                  <FolderSearch size={12} color="var(--accent-orange)" />
+                  <span>Case Roster ({casesList.length})</span>
+                </button>
+              )}
             </div>
           </div>
 

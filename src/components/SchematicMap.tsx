@@ -139,7 +139,7 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
         <rect width="100%" height="100%" fill="url(#grid)" />
         <rect width="100%" height="100%" fill="url(#gridSubtle)" />
 
-        {/* Fictional Geographic Schematic Landmarks */}
+        {/* Fictional Geographic Schematic Landmarks - Delhi Sectors */}
         {/* River corridor (schematic curve) */}
         <path 
           d="M 720 0 Q 760 250, 840 400 T 980 600" 
@@ -148,35 +148,35 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
           strokeWidth="38" 
           strokeLinecap="round" 
         />
-        <text x="810" y="320" fill="#3B506D" fontSize="11" fontFamily="var(--font-mono)" letterSpacing="3">
-          RIVERWALK CANAL
+        <text x="790" y="320" fill="#3B506D" fontSize="11" fontFamily="var(--font-mono)" letterSpacing="3">
+          YAMUNA RIVER ARTERIAL
         </text>
 
-        {/* Major Avenue: Maple Ave Corridor */}
+        {/* Major Avenue: Connaught Place Radial Corridor */}
         <line x1="180" y1="120" x2="680" y2="480" stroke="#2B3242" strokeWidth="12" strokeLinecap="round" />
-        <text x="360" y="275" fill="#586379" fontSize="10" fontFamily="var(--font-mono)" transform="rotate(35 360 275)" letterSpacing="2">
-          MAPLE AVENUE CORRIDOR
+        <text x="340" y="275" fill="#586379" fontSize="10" fontFamily="var(--font-mono)" transform="rotate(35 340 275)" letterSpacing="2">
+          CONNAUGHT PLACE RADIAL CORRIDOR
         </text>
 
-        {/* 4th Street Crossline */}
+        {/* Karol Bagh Arterial Crossline */}
         <line x1="280" y1="520" x2="620" y2="100" stroke="#252B39" strokeWidth="8" strokeLinecap="round" />
         <text x="440" y="300" fill="#4B5568" fontSize="9" fontFamily="var(--font-mono)" transform="rotate(-51 440 300)" letterSpacing="2">
-          4TH STREET ARTERIAL
+          KAROL BAGH ARTERIAL
         </text>
 
-        {/* Transit Bus Route 14 Line */}
+        {/* Delhi Metro Blue Line Transit Vector */}
         <path 
           d="M 440 264 Q 510 300, 580 336" 
           fill="none" 
-          stroke="#6D28D9" 
-          strokeWidth="3" 
+          stroke="#0284C7" 
+          strokeWidth="3.5" 
           strokeDasharray="6 4" 
         />
-        <text x="515" y="295" fill="#8B5CF6" fontSize="9" fontFamily="var(--font-mono)">
-          BUS ROUTE 14 TRANSIT VECTOR
+        <text x="495" y="295" fill="#38BDF8" fontSize="9" fontFamily="var(--font-mono)">
+          DMRC BLUE LINE TRANSIT VECTOR
         </text>
 
-        {/* Oakwood Park schematic boundary */}
+        {/* Central Park Sector boundary */}
         <rect 
           x="200" 
           y="140" 
@@ -188,15 +188,15 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
           strokeWidth="1.5" 
           strokeDasharray="4 2" 
         />
-        <text x="220" y="170" fill="#3D7A60" fontSize="10" fontFamily="var(--font-heading)" letterSpacing="1">
-          OAKWOOD COMMUNITY PARK
+        <text x="215" y="170" fill="#3D7A60" fontSize="10" fontFamily="var(--font-heading)" letterSpacing="1">
+          CENTRAL PARK SECTOR
         </text>
 
-        {/* Central Junction Terminal Schematic */}
+        {/* Karol Bagh Hub Schematic */}
         <rect 
           x="540" 
           y="310" 
-          width="80" 
+          width="90" 
           height="50" 
           rx="4" 
           fill="#1F1C2B" 
@@ -204,7 +204,7 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
           strokeWidth="1.5" 
         />
         <text x="546" y="340" fill="#9D8CDB" fontSize="9" fontFamily="var(--font-heading)" letterSpacing="1">
-          CENTRAL JCT
+          KAROL BAGH HUB
         </text>
 
         {/* Concentric Distance Rings from Last Known Location */}
@@ -309,7 +309,7 @@ export const SchematicMap: React.FC<SchematicMapProps> = ({
             fontWeight="bold"
             letterSpacing="0.05em"
           >
-            ORIGIN: LAST KNOWN (16:30)
+            ORIGIN: {activeCase.neighbourhood ? activeCase.neighbourhood.toUpperCase() : 'LAST KNOWN'} ({activeCase.lastSeenTime.split(' ')[0]})
           </text>
         </g>
 

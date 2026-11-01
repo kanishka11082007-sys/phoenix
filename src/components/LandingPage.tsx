@@ -76,9 +76,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <button 
               id="btn-view-demo-case"
               className="btn-secondary" 
-              onClick={() => onOpenDemoCase('case-014')}
+              onClick={() => onOpenDemoCase('case-del-014')}
             >
-              <span>View Demo Case (DEMO-014)</span>
+              <span>View Demo Case (DEMO-DEL-014)</span>
               <Eye size={17} />
             </button>
           </div>
@@ -124,7 +124,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <footer className="landing-footer">
         <div className="privacy-notice">
           <Lock size={13} />
-          <span>PROTOTYPE NOTICE: Uses strictly fictional demo data, mock locations, and geometric placeholders. No real children's imagery or PII is used.</span>
+          <span>SIMULATED DELHI CASEWORK • All person names, sightings, Delhi neighbourhood locations, and timelines are entirely fictional for demonstration only. Zero real-world PII or child tracking data.</span>
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#8891A0' }}>
           CONFIDENTIAL • RESTRICTED ACCESS

@@ -7,10 +7,11 @@ import {
   Settings, 
   ArrowLeft,
   PlusCircle,
-  UserCheck
+  UserCheck,
+  Crosshair
 } from 'lucide-react';
 
-export type WorkspaceTab = 'cases' | 'sightings' | 'evidence' | 'settings';
+export type WorkspaceTab = 'cases' | 'active-case' | 'sightings' | 'evidence' | 'settings';
 
 interface NavbarProps {
   currentTab: WorkspaceTab;
@@ -18,6 +19,7 @@ interface NavbarProps {
   onReturnToLanding: () => void;
   onOpenNewCaseModal: () => void;
   activeCaseCount: number;
+  activeCaseCode?: string;
   totalSightingsCount: number;
 }
 
@@ -27,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onReturnToLanding,
   onOpenNewCaseModal,
   activeCaseCount,
+  activeCaseCode,
   totalSightingsCount,
 }) => {
   return (
@@ -51,10 +54,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="nav-tab-cases"
               className={`nav-tab-btn ${currentTab === 'cases' ? 'active' : ''}`}
               onClick={() => onSelectTab('cases')}
+              title="Master Case Roster"
             >
               <FolderSearch size={16} />
-              <span>Cases</span>
+              <span>Case Roster</span>
               <span className="badge-counter">{activeCaseCount}</span>
+            </button>
+
+            <button
+              id="nav-tab-active-case"
+              className={`nav-tab-btn ${currentTab === 'active-case' ? 'active' : ''}`}
+              onClick={() => onSelectTab('active-case')}
+              title={`Active Case Investigation: ${activeCaseCode || ''}`}
+            >
+              <Crosshair size={16} />
+              <span>Active Investigation</span>
+              {activeCaseCode && (
+                <span className="badge-counter" style={{ background: 'var(--accent-orange)', color: '#FFFFFF' }}>
+                  {activeCaseCode}
+                </span>
+              )}
             </button>
 
             <button

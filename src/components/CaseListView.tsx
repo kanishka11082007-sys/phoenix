@@ -155,15 +155,25 @@ export const CaseListView: React.FC<CaseListViewProps> = ({
                 transition: 'all 0.15s ease',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span className="case-code-chip">{c.code}</span>
-                  <h4 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                    <span className="case-code-chip">{c.code}</span>
+                    <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', background: '#FEF08A', color: '#713F12', padding: '1px 6px', borderRadius: '3px', fontWeight: 700 }}>
+                      {c.simulationBadge || 'SIMULATED CASE'}
+                    </span>
+                    {c.neighbourhood && (
+                      <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', background: 'var(--bg-surface-subtle)', color: 'var(--text-secondary)', padding: '1px 6px', borderRadius: '3px', border: '1px solid var(--border-medium)' }}>
+                        DELHI • {c.neighbourhood}
+                      </span>
+                    )}
+                  </div>
+                  <h4 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>
                     {c.title}
+                    <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-muted)', marginLeft: '6px' }}>
+                      (Age {c.age} • Alias: "{c.alias}")
+                    </span>
                   </h4>
-                  <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                    (Age {c.age})
-                  </span>
                 </div>
 
                 {getStatusBadge(c.status)}

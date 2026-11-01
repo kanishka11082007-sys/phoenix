@@ -2,13 +2,15 @@ export type CaseStatus = 'Active Priority 1' | 'In Review' | 'Closed' | 'Archive
 
 export interface Case {
   id: string;
-  code: string; // e.g. DEMO-014
-  title: string; // e.g. Child A
+  code: string; // e.g. DEMO-DEL-014
+  title: string; // e.g. Mira Sharma (No "Demo" in the person's name)
   alias: string;
   age: number;
   status: CaseStatus;
+  neighbourhood: string; // Delhi neighbourhood: Dwarka, Rohini, Karol Bagh, Lajpat Nagar, Connaught Place, etc.
+  simulationBadge: 'SIMULATED CASE' | 'DEMO DATA';
   openedDate: string;
-  lastSeenLocation: string;
+  lastSeenLocation: string; // General neighbourhood context only, no real home addresses
   lastSeenTime: string;
   lastSeenCoordinates: { x: number; y: number; lat: number; lng: number };
   clothingDescription: string;
@@ -26,17 +28,18 @@ export type SightingStatus = 'Unverified' | 'Corroborated' | 'AI Linked' | 'Dism
 export interface Sighting {
   id: string;
   caseId: string;
-  code: string; // e.g. RPT-201
+  code: string; // e.g. RPT-DEL-201
   source: SightingSource;
   reportedTime: string;
   elapsedMinutes: number; // minutes after last seen
-  locationName: string;
+  neighbourhood: string; // e.g. Karol Bagh, Connaught Place, Dwarka
+  locationName: string; // General landmark context only
   coordinates: { x: number; y: number }; // Relative coordinates for schematic map (0-100%)
   description: string;
   clothingNotes: string;
   status: SightingStatus;
   confidenceScore: number; // 0 - 100
-  sourceRef: string; // e.g. Cam-08 West Gate, Hotline #412
+  sourceRef: string; // e.g. Delhi Metro CCTV Hub Cam-08, Public Tip Line #412
   evidenceSnippet?: string;
   investigatorNotes?: string;
   linkedSightingCodes?: string[];

@@ -75,7 +75,7 @@ export const AISuggestionsReview: React.FC<AISuggestionsReviewProps> = ({
                     {isUnverified && (
                       <span className="ai-unverified-pill">
                         <AlertTriangle size={12} />
-                        UNVERIFIED SUGGESTION
+                        AI suggestion · Unverified
                       </span>
                     )}
                     {isConfirmed && (

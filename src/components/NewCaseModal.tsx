@@ -13,11 +13,12 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
   onClose,
   onCreateCase,
 }) => {
-  const [code, setCode] = useState(`DEMO-01${Math.floor(5 + Math.random() * 5)}`);
+  const [code, setCode] = useState(`DEMO-DEL-0${Math.floor(50 + Math.random() * 40)}`);
   const [title, setTitle] = useState('');
   const [alias, setAlias] = useState('');
   const [age, setAge] = useState<number>(10);
   const [status, setStatus] = useState<CaseStatus>('Active Priority 1');
+  const [neighbourhood, setNeighbourhood] = useState('Dwarka');
   const [lastSeenLocation, setLastSeenLocation] = useState('');
   const [lastSeenTime, setLastSeenTime] = useState('15:45 hrs today');
   const [clothingDescription, setClothingDescription] = useState('');
@@ -33,22 +34,24 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
 
     const newCaseItem: Case = {
       id: `case-${Date.now()}`,
-      code: code.trim() || `DEMO-${Math.floor(100 + Math.random() * 900)}`,
+      code: code.trim() || `DEMO-DEL-${Math.floor(100 + Math.random() * 900)}`,
       title,
       alias: alias || title,
       age: Number(age),
       status,
+      neighbourhood: neighbourhood || 'Delhi Central',
+      simulationBadge: 'SIMULATED CASE',
       openedDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
-      lastSeenLocation,
+      lastSeenLocation: `${neighbourhood} — ${lastSeenLocation}`,
       lastSeenTime,
-      lastSeenCoordinates: { x: 50, y: 50, lat: 42.36, lng: -71.06 },
+      lastSeenCoordinates: { x: 50, y: 50, lat: 28.6139, lng: 77.2090 },
       clothingDescription: clothingDescription || 'Attire details pending intake verification.',
       physicalDescription: physicalDescription || 'Height ~135 cm, average build.',
       clothingTags: clothingDescription
         ? clothingDescription.split(',').map((t) => t.trim()).filter(Boolean)
         : ['Profile Ingested'],
       leadInvestigator,
-      investigatorBadge: 'INV-4082',
+      investigatorBadge: 'INV-DEL-4082',
       summary: summary || 'Newly opened investigative inquiry. Initial sighting intake initiated.',
       avatarPlaceholderType: 'child_silhouette_a',
     };
